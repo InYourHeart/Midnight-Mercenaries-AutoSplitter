@@ -3,8 +3,8 @@
 state("Midnight Mercenaries")
 {
     int roomNumber: 0x6561E0;
-    int inSetup: 0x443D44, 0xF70, 0xCC;
-    int fadeValue: 0x445C40, 0x60, 0x10, 0x9AC, 0x4E4;
+    int inSetup: 0x02984BD0, 0x280, 0xC, 0xD8;
+    int selectedMercenary: 0x445C40, 0x60, 0x10, 0x25C, 0x444;
 }
 
 startup 
@@ -21,8 +21,19 @@ start
             return true;
         }
 
-        //All other levels (fadeValue used to not trigger when using restart on death)
-        if (current.inSetup == 0 && old.inSetup != 0 && current.fadeValue == 0){
+        //All other levels (check for setup flag and mercenary selection)
+        if (current.inSetup == 0 && old.inSetup != 0 && current.selectedMercenary != 0 && old.selectedMercenary == 0){
+            //In Sunrise, ignore it if we are not in the first level (Sniper)
+            if (current.roomNumber == 117 ||
+                current.roomNumber == 118 ||
+                current.roomNumber == 119 ||
+                current.roomNumber == 121 ||
+                current.roomNumber == 122 ||
+                current.roomNumber == 125 ||
+                current.roomNumber == 126) {
+                return false;
+            }
+
             return true;
         }
     } 
@@ -75,32 +86,7 @@ reset
     //Individual level
     if (settings["isIndividualLevel"]){
         //Restart
-        if (current.inSetup != 0 && old.fadeValue != 0 &&
-            (current.roomNumber == 17 ||
-            current.roomNumber == 20 ||
-            current.roomNumber == 22 ||
-            current.roomNumber == 25 ||
-            current.roomNumber == 27 ||
-            current.roomNumber == 29 ||
-            current.roomNumber == 33 ||
-            current.roomNumber == 35 ||
-            current.roomNumber == 38 ||
-            current.roomNumber == 41 ||
-            current.roomNumber == 45 ||
-            current.roomNumber == 47 ||
-            current.roomNumber == 52 ||
-            current.roomNumber == 57 ||
-            current.roomNumber == 60 ||
-            current.roomNumber == 64 ||
-            current.roomNumber == 68 ||
-            current.roomNumber == 73 ||
-            current.roomNumber == 80 ||
-            current.roomNumber == 85 ||
-            current.roomNumber == 91 ||
-            current.roomNumber == 94 ||
-            current.roomNumber == 97 ||
-            current.roomNumber == 107 ||
-            current.roomNumber == 115)){
+        if (current.inSetup != 0 && current.selectedMercenary == 0 && old.selectedMercenary != 0)){
             return true;
         }
     }
