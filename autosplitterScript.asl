@@ -3,7 +3,7 @@
 state("Midnight Mercenaries")
 {
     int roomNumber: 0x6561E0;
-    int inSetup: 0x02984BD0, 0x280, 0xC, 0xD8;
+    int inSetup: 0x655F80, 0x280, 0xC, 0xD8;
     int selectedMercenary: 0x445C40, 0x60, 0x10, 0x25C, 0x444;
 }
 
@@ -21,8 +21,8 @@ start
             return true;
         }
 
-        //All other levels (check for setup flag and mercenary selection)
-        if (current.inSetup == 0 && old.inSetup != 0 && current.selectedMercenary != 0 && old.selectedMercenary == 0){
+        //All other levels (check for mercenary selection)
+        if (current.selectedMercenary != 0 && old.selectedMercenary == 0){
             //In Sunrise, ignore it if we are not in the first level (Sniper)
             if (current.roomNumber == 117 ||
                 current.roomNumber == 118 ||
@@ -86,7 +86,7 @@ reset
     //Individual level
     if (settings["isIndividualLevel"]){
         //Restart
-        if (current.inSetup != 0 && current.selectedMercenary == 0 && old.selectedMercenary != 0)){
+        if (current.inSetup != 0 && current.selectedMercenary == 0 && old.selectedMercenary != 0){
             return true;
         }
     }
